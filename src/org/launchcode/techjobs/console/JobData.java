@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by LaunchCode
@@ -70,17 +71,18 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
+        String lowerValue = value.toLowerCase(); //makes search value lowercase
+
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(lowerValue)) { //compares lower to lower
                 jobs.add(row);
             }
         }
-
         return jobs;
     }
 
@@ -125,4 +127,23 @@ public class JobData {
         }
     }
 
+    public static ArrayList<HashMap<String, String>> findByValue (String searchTerm){ ///my new method i made for part 2
+        loadData(); //loads data
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); //creates array of hashmaps to store found jobs
+        String lowerSearchTerm = searchTerm.toLowerCase();
+
+        for (HashMap<String,String> row : allJobs) { //gets each row
+            ArrayList<String> columns = new ArrayList<>(); //ArrayList to store each value in a row
+            for (String value : row.values()) {
+                columns.add(value); //add each row value to 'columns'
+            }
+            for (String each : columns) { //checks each value in 'columns' to see if it match searchTerm
+                if (each.toLowerCase().contains(lowerSearchTerm)) {
+                    jobs.add(row); //if searchTerm found in value, add row to 'jobs'
+                    break;
+                }
+            }
+        }
+        return jobs;
+    }
 }
